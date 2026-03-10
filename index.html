@@ -275,6 +275,33 @@
     transform: scale(1.04);
   }
 
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .card:hover .card-img {
+    transform: scale(1.04);
+  }
+
+  .card-live-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    padding: 4px 14px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 100px;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(200, 69, 46, 0.35);
+  }
+
   .placeholder-icon {
     width: 48px;
     height: 48px;
@@ -362,18 +389,149 @@
     transform: scale(1) translateY(0);
   }
 
-  .lightbox-image {
+  /* Carousel */
+  .lightbox-carousel {
+    position: relative;
     aspect-ratio: 16 / 10;
     border-radius: 16px 16px 0 0;
     overflow: hidden;
   }
 
-  .lightbox-image .placeholder {
+  .carousel-track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .carousel-slide {
+    min-width: 100%;
+    height: 100%;
+  }
+
+  .carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .carousel-slide .placeholder {
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.85);
+    color: var(--text-primary);
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    opacity: 0;
+    backdrop-filter: blur(8px);
+  }
+
+  .lightbox-carousel:hover .carousel-btn {
+    opacity: 1;
+  }
+
+  .carousel-btn:hover {
+    background: rgba(255,255,255,1);
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .carousel-prev { left: 16px; }
+  .carousel-next { right: 16px; }
+
+  .carousel-dots {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+  }
+
+  .carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+  }
+
+  .carousel-dot.active {
+    background: rgba(255,255,255,0.9);
+    transform: scale(1.2);
+  }
+
+  /* Case Study */
+  .case-study-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 28px 0;
+  }
+
+  .case-study-heading {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  .case-study-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  .case-study-item {
+    padding: 0;
+  }
+
+  .case-study-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .case-study-value {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  .case-study-tools {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .case-study-tool {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 100px;
+    background: var(--bg);
+    color: var(--text-secondary);
   }
 
   .lightbox-body {
@@ -418,6 +576,29 @@
     border-radius: 100px;
     background: var(--bg);
     color: var(--text-secondary);
+  }
+
+  .lightbox-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+    padding: 12px 28px;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .lightbox-cta:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(200, 69, 46, 0.3);
   }
 
   .lightbox-close {
@@ -545,12 +726,23 @@
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lightbox-close">&times;</button>
   <div class="lightbox-content">
-    <div class="lightbox-image" id="lightbox-image"></div>
+    <div class="lightbox-carousel" id="lightbox-carousel">
+      <div class="carousel-track" id="carousel-track"></div>
+      <button class="carousel-btn carousel-prev" id="carousel-prev" aria-label="Previous slide">&#8249;</button>
+      <button class="carousel-btn carousel-next" id="carousel-next" aria-label="Next slide">&#8250;</button>
+      <div class="carousel-dots" id="carousel-dots"></div>
+    </div>
     <div class="lightbox-body">
       <div class="lightbox-category" id="lightbox-category"></div>
       <h3 class="lightbox-title" id="lightbox-title"></h3>
       <p class="lightbox-desc" id="lightbox-desc"></p>
       <div class="lightbox-tags" id="lightbox-tags"></div>
+      <a class="lightbox-cta" id="lightbox-cta" href="#" target="_blank" style="display:none">查看作品 &rarr;</a>
+      <div class="case-study" id="case-study" style="display:none">
+        <div class="case-study-divider"></div>
+        <h4 class="case-study-heading">Case Study</h4>
+        <div class="case-study-grid" id="case-study-grid"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -580,12 +772,26 @@ const projects = [
     colors: ["#1B2838", "#2A4A6B", "#4ECDC4"]
   },
   {
-    title: "Palate — Recipe Platform",
+    title: "Café Breeze — 咖啡廳網站設計",
     category: "Web Design",
     filter: "web",
-    description: "A recipe discovery and meal planning platform with editorial-quality food photography layouts, smart ingredient scaling, and a community-driven rating system.",
-    tags: ["Web App", "E-commerce", "Responsive", "Figma"],
-    colors: ["#F5E6D3", "#E74C3C", "#2C3E50"]
+    description: "為精品咖啡廳打造的品牌網站，融合溫暖手工質感與現代排版設計。從 Hero 區塊到菜單展示，每個細節都呼應咖啡廳的職人精神。",
+    tags: ["Web Design", "Landing Page", "Responsive"],
+    colors: ["#F5E6D3", "#8B6F47", "#3C2A14"],
+    thumbnail: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&q=80",
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1200&q=80",
+      "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=1200&q=80"
+    ],
+    liveUrl: "works/cafe/index.html",
+    caseStudy: {
+      problem: "精品咖啡廳需要一個能反映其品牌調性的線上門面，現有網站缺乏質感且未能傳達手工咖啡的溫暖氛圍。",
+      solution: "以編輯式排版、暖色調設計語言打造沈浸式瀏覽體驗，搭配高品質攝影與細膩的微互動效果。",
+      outcome: "完成一頁式響應式網站，涵蓋品牌故事、菜單展示、門市資訊等完整內容，適配所有裝置尺寸。",
+      tools: ["Claude Code", "HTML/CSS", "JavaScript"],
+      duration: "1 天"
+    }
   },
   {
     title: "Orbis — Travel Companion",
@@ -648,6 +854,11 @@ function createPlaceholderSVG(colors, size = 48) {
   `;
 }
 
+function handleImgError(img, index) {
+  const p = projects[index];
+  img.parentElement.innerHTML = '<div class="placeholder" style="background:' + p.colors[0] + '">' + createPlaceholderSVG(p.colors) + '</div>';
+}
+
 function renderCards(filter = 'all') {
   grid.innerHTML = '';
   const filtered = filter === 'all'
@@ -658,11 +869,19 @@ function renderCards(filter = 'all') {
     const card = document.createElement('div');
     card.className = 'card';
     card.dataset.filter = project.filter;
+    const projectIndex = projects.indexOf(project);
+
+    const imageContent = project.thumbnail
+      ? `<img class="card-img" src="${project.thumbnail}" alt="${project.title}" loading="lazy"
+          onerror="handleImgError(this, ${projectIndex})">`
+      : `<div class="placeholder" style="background: ${project.colors[0]}">
+          ${createPlaceholderSVG(project.colors)}
+        </div>`;
+
     card.innerHTML = `
       <div class="card-image">
-        <div class="placeholder" style="background: ${project.colors[0]}">
-          ${createPlaceholderSVG(project.colors)}
-        </div>
+        ${imageContent}
+        ${project.liveUrl ? '<span class="card-live-badge">Live</span>' : ''}
       </div>
       <div class="card-body">
         <div class="card-category">${project.category}</div>
@@ -681,6 +900,8 @@ function renderCards(filter = 'all') {
       card.classList.add('visible');
     }, 80 * i + 100);
   });
+
+  document.querySelector('.project-count').textContent = `${filtered.length} Projects`;
 }
 
 renderCards();
@@ -696,18 +917,116 @@ document.querySelectorAll('.filter-pill').forEach(pill => {
 
 // ─── Lightbox ───
 const lightbox = document.getElementById('lightbox');
+let currentSlide = 0;
+let currentSlides = [];
 
 function openLightbox(project) {
-  document.getElementById('lightbox-image').innerHTML =
-    `<div class="placeholder" style="background: ${project.colors[0]}">${createPlaceholderSVG(project.colors)}</div>`;
+  const track = document.getElementById('carousel-track');
+  const dots = document.getElementById('carousel-dots');
+
+  // Build slides
+  if (project.images && project.images.length > 0) {
+    currentSlides = project.images;
+    const projectIndex = projects.indexOf(project);
+    track.innerHTML = project.images.map(src =>
+      `<div class="carousel-slide"><img src="${src}" alt="${project.title}" onerror="handleImgError(this, ${projectIndex})"></div>`
+    ).join('');
+
+    // Build dots
+    dots.innerHTML = project.images.map((_, i) =>
+      `<button class="carousel-dot${i === 0 ? ' active' : ''}" data-slide="${i}"></button>`
+    ).join('');
+    dots.style.display = project.images.length > 1 ? 'flex' : 'none';
+
+    // Show/hide nav buttons
+    document.getElementById('carousel-prev').style.display = project.images.length > 1 ? 'flex' : 'none';
+    document.getElementById('carousel-next').style.display = project.images.length > 1 ? 'flex' : 'none';
+  } else {
+    currentSlides = [];
+    track.innerHTML = `<div class="carousel-slide"><div class="placeholder" style="background:${project.colors[0]}">${createPlaceholderSVG(project.colors)}</div></div>`;
+    dots.innerHTML = '';
+    dots.style.display = 'none';
+    document.getElementById('carousel-prev').style.display = 'none';
+    document.getElementById('carousel-next').style.display = 'none';
+  }
+
+  currentSlide = 0;
+  track.style.transform = 'translateX(0)';
+
   document.getElementById('lightbox-category').textContent = project.category;
   document.getElementById('lightbox-title').textContent = project.title;
   document.getElementById('lightbox-desc').textContent = project.description;
   document.getElementById('lightbox-tags').innerHTML =
     project.tags.map(t => `<span class="lightbox-tag">${t}</span>`).join('');
+
+  // Live URL button
+  const ctaEl = document.getElementById('lightbox-cta');
+  if (project.liveUrl) {
+    ctaEl.href = project.liveUrl;
+    ctaEl.style.display = 'inline-flex';
+  } else {
+    ctaEl.style.display = 'none';
+  }
+
+  // Case study
+  const caseStudyEl = document.getElementById('case-study');
+  if (project.caseStudy) {
+    const cs = project.caseStudy;
+    document.getElementById('case-study-grid').innerHTML = `
+      <div class="case-study-item">
+        <div class="case-study-label">Problem</div>
+        <div class="case-study-value">${cs.problem}</div>
+      </div>
+      <div class="case-study-item">
+        <div class="case-study-label">Solution</div>
+        <div class="case-study-value">${cs.solution}</div>
+      </div>
+      <div class="case-study-item">
+        <div class="case-study-label">Outcome</div>
+        <div class="case-study-value">${cs.outcome}</div>
+      </div>
+      <div class="case-study-item">
+        <div class="case-study-label">Tools</div>
+        <div class="case-study-tools">${cs.tools.map(t => `<span class="case-study-tool">${t}</span>`).join('')}</div>
+      </div>
+      <div class="case-study-item">
+        <div class="case-study-label">Duration</div>
+        <div class="case-study-value">${cs.duration}</div>
+      </div>
+    `;
+    caseStudyEl.style.display = 'block';
+  } else {
+    caseStudyEl.style.display = 'none';
+  }
+
   lightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
+
+function goToSlide(index) {
+  if (index < 0 || index >= currentSlides.length) return;
+  currentSlide = index;
+  document.getElementById('carousel-track').style.transform = `translateX(-${index * 100}%)`;
+  document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === index);
+  });
+}
+
+// Carousel events
+document.getElementById('carousel-prev').addEventListener('click', (e) => {
+  e.stopPropagation();
+  goToSlide(currentSlide - 1);
+});
+document.getElementById('carousel-next').addEventListener('click', (e) => {
+  e.stopPropagation();
+  goToSlide(currentSlide + 1);
+});
+document.getElementById('carousel-dots').addEventListener('click', (e) => {
+  if (e.target.classList.contains('carousel-dot')) {
+    e.stopPropagation();
+    goToSlide(parseInt(e.target.dataset.slide));
+  }
+});
 
 function closeLightbox() {
   lightbox.classList.remove('open');
@@ -720,6 +1039,8 @@ lightbox.addEventListener('click', (e) => {
 });
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft' && lightbox.classList.contains('open')) goToSlide(currentSlide - 1);
+  if (e.key === 'ArrowRight' && lightbox.classList.contains('open')) goToSlide(currentSlide + 1);
 });
 
 // ─── Nav scroll effect ───
