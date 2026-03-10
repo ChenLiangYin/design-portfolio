@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --bg: #F6F4F0;
+    --bg-card: #FFFFFF;
+    --text-primary: #1A1A1A;
+    --text-secondary: #6B6560;
+    --text-muted: #9E9893;
+    --accent: #C8452E;
+    --accent-hover: #A8381F;
+    --border: #E8E4DF;
+    --shadow: 0 2px 20px rgba(26, 26, 26, 0.06);
+    --shadow-hover: 0 12px 40px rgba(26, 26, 26, 0.12);
+    --radius: 12px;
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body: 'Instrument Sans', system-ui, sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── Grain Overlay ─── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  /* ─── Nav ─── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(246, 244, 240, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+
+  nav.scrolled {
+    border-bottom-color: var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--text-primary);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background: var(--accent);
+    transition: width 0.3s ease;
+  }
+
+  .nav-links a:hover {
+    color: var(--text-primary);
+  }
+
+  .nav-links a:hover::after {
+    width: 100%;
+  }
+
+  /* ─── Hero ─── */
+  .hero {
+    padding: 180px 48px 100px;
+    max-width: 900px;
+  }
+
+  .hero-eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(42px, 6vw, 72px);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.35s forwards;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero p {
+    font-size: 18px;
+    color: var(--text-secondary);
+    max-width: 520px;
+    line-height: 1.7;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.5s forwards;
+  }
+
+  /* ─── Section ─── */
+  .section-header {
+    padding: 0 48px;
+    margin-bottom: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .section-header h2 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  .project-count {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* ─── Filter Pills ─── */
+  .filters {
+    padding: 0 48px;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.6s forwards;
+  }
+
+  .filter-pill {
+    padding: 8px 20px;
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    letter-spacing: 0.01em;
+  }
+
+  .filter-pill:hover {
+    border-color: var(--text-secondary);
+    color: var(--text-primary);
+  }
+
+  .filter-pill.active {
+    background: var(--text-primary);
+    border-color: var(--text-primary);
+    color: var(--bg);
+  }
+
+  /* ─── Grid ─── */
+  .grid {
+    padding: 0 48px 120px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+
+  /* ─── Card ─── */
+  .card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .card.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.6s ease, transform 0.6s ease,
+                box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .card-image {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .card-image .placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .card:hover .placeholder {
+    transform: scale(1.04);
+  }
+
+  .placeholder-icon {
+    width: 48px;
+    height: 48px;
+    opacity: 0.25;
+  }
+
+  .card-body {
+    padding: 24px 28px 28px;
+  }
+
+  .card-category {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .card-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 18px;
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 100px;
+    background: var(--bg);
+    color: var(--text-secondary);
+    letter-spacing: 0.01em;
+  }
+
+  /* ─── Lightbox ─── */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(26, 26, 26, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+
+  .lightbox.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .lightbox-content {
+    background: var(--bg-card);
+    border-radius: 16px;
+    max-width: 860px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.92) translateY(20px);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .lightbox.open .lightbox-content {
+    transform: scale(1) translateY(0);
+  }
+
+  .lightbox-image {
+    aspect-ratio: 16 / 10;
+    border-radius: 16px 16px 0 0;
+    overflow: hidden;
+  }
+
+  .lightbox-image .placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox-body {
+    padding: 36px 40px 40px;
+  }
+
+  .lightbox-category {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .lightbox-title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 400;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .lightbox-desc {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .lightbox-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .lightbox-tag {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 16px;
+    border-radius: 100px;
+    background: var(--bg);
+    color: var(--text-secondary);
+  }
+
+  .lightbox-close {
+    position: fixed;
+    top: 28px;
+    right: 32px;
+    z-index: 210;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .lightbox.open .lightbox-close {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.22);
+    transform: scale(1.08);
+  }
+
+  /* ─── Footer ─── */
+  footer {
+    padding: 40px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  footer a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  footer a:hover {
+    color: var(--accent);
+  }
+
+  /* ─── Animations ─── */
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    nav { padding: 18px 24px; }
+    .hero { padding: 140px 24px 72px; }
+    .section-header { padding: 0 24px; }
+    .filters { padding: 0 24px; }
+    .grid { padding: 0 24px 80px; }
+    footer { padding: 32px 24px; flex-direction: column; gap: 12px; }
+    .nav-links { gap: 20px; }
+    .nav-links a { font-size: 12px; }
+    .lightbox-body { padding: 28px 24px 32px; }
+    .lightbox-title { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <a href="#" class="nav-logo">Portfolio</a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="mailto:your.email@example.com">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-eyebrow">Design Portfolio</div>
+  <h1>Crafting digital experiences with <em>intention</em></h1>
+  <p>A curated selection of UI/UX design work — from mobile apps to enterprise dashboards, each project shaped by research, clarity, and thoughtful details.</p>
+</section>
+
+<!-- Projects -->
+<section id="work">
+  <div class="section-header">
+    <h2>Selected Work</h2>
+    <span class="project-count">8 Projects</span>
+  </div>
+
+  <div class="filters">
+    <button class="filter-pill active" data-filter="all">All</button>
+    <button class="filter-pill" data-filter="mobile">Mobile App</button>
+    <button class="filter-pill" data-filter="web">Web Design</button>
+    <button class="filter-pill" data-filter="dashboard">Dashboard</button>
+    <button class="filter-pill" data-filter="branding">Branding</button>
+  </div>
+
+  <div class="grid" id="project-grid"></div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close">&times;</button>
+  <div class="lightbox-content">
+    <div class="lightbox-image" id="lightbox-image"></div>
+    <div class="lightbox-body">
+      <div class="lightbox-category" id="lightbox-category"></div>
+      <h3 class="lightbox-title" id="lightbox-title"></h3>
+      <p class="lightbox-desc" id="lightbox-desc"></p>
+      <div class="lightbox-tags" id="lightbox-tags"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <span>&copy; 2026 Your Name. All rights reserved.</span>
+  <a href="#">Back to top &uarr;</a>
+</footer>
+
+<script>
+const projects = [
+  {
+    title: "Mindful — Meditation App",
+    category: "Mobile App",
+    filter: "mobile",
+    description: "A calming mobile experience for guided meditation and sleep. Designed with gentle transitions, ambient color palettes, and a distraction-free interface that encourages daily practice.",
+    tags: ["UI/UX", "iOS", "Wellness", "Figma"],
+    colors: ["#E8DDD3", "#C9B99A", "#8B7355"]
+  },
+  {
+    title: "Vaultline — Fintech Dashboard",
+    category: "Dashboard",
+    filter: "dashboard",
+    description: "A comprehensive financial analytics dashboard for portfolio managers. Features real-time data visualization, customizable widgets, and a dark-mode-first design system built for extended use.",
+    tags: ["Dashboard", "Data Viz", "Fintech", "Design System"],
+    colors: ["#1B2838", "#2A4A6B", "#4ECDC4"]
+  },
+  {
+    title: "Palate — Recipe Platform",
+    category: "Web Design",
+    filter: "web",
+    description: "A recipe discovery and meal planning platform with editorial-quality food photography layouts, smart ingredient scaling, and a community-driven rating system.",
+    tags: ["Web App", "E-commerce", "Responsive", "Figma"],
+    colors: ["#F5E6D3", "#E74C3C", "#2C3E50"]
+  },
+  {
+    title: "Orbis — Travel Companion",
+    category: "Mobile App",
+    filter: "mobile",
+    description: "An intelligent travel companion app that curates personalized itineraries. Features interactive maps, offline guides, and a social layer for sharing discoveries with fellow travelers.",
+    tags: ["Mobile", "Maps", "Social", "UX Research"],
+    colors: ["#DCE8F0", "#5B8DB8", "#2C5F7C"]
+  },
+  {
+    title: "Praxis — Learning Management",
+    category: "Dashboard",
+    filter: "dashboard",
+    description: "An enterprise LMS redesign focusing on instructor workflows and student engagement metrics. Simplified a complex feature set into an intuitive, card-based navigation system.",
+    tags: ["Enterprise", "EdTech", "Accessibility", "Figma"],
+    colors: ["#F0EBE3", "#7C6F5B", "#3D5A47"]
+  },
+  {
+    title: "Noctis — Brand Identity",
+    category: "Branding",
+    filter: "branding",
+    description: "Complete brand identity system for a premium audio equipment company. Includes logo design, typography selection, color system, and comprehensive usage guidelines.",
+    tags: ["Branding", "Logo", "Typography", "Guidelines"],
+    colors: ["#1A1A2E", "#16213E", "#E94560"]
+  },
+  {
+    title: "Greenhouse — Sustainability Tracker",
+    category: "Web Design",
+    filter: "web",
+    description: "A personal carbon footprint tracker with gamification elements. Users set reduction goals, track daily habits, and earn achievements — all wrapped in an organic, nature-inspired design language.",
+    tags: ["Web App", "Gamification", "Green Tech", "Figma"],
+    colors: ["#E8F0E4", "#6B9B5E", "#2D4A22"]
+  },
+  {
+    title: "Kinetic — Fitness Wearable UI",
+    category: "Mobile App",
+    filter: "mobile",
+    description: "Interface design for a next-generation fitness wearable. Optimized for tiny displays with high-contrast typography, glanceable data cards, and adaptive layouts that respond to activity context.",
+    tags: ["Wearable", "Health", "Micro UI", "Prototyping"],
+    colors: ["#0D0D0D", "#1A1A2E", "#00D4AA"]
+  }
+];
+
+// ─── Render Cards ───
+const grid = document.getElementById('project-grid');
+
+function createPlaceholderSVG(colors, size = 48) {
+  const [bg, mid, fg] = colors;
+  return `
+    <svg width="100%" height="100%" viewBox="0 0 800 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="800" height="500" fill="${bg}"/>
+      <circle cx="300" cy="200" r="120" fill="${mid}" opacity="0.5"/>
+      <circle cx="500" cy="300" r="80" fill="${fg}" opacity="0.6"/>
+      <rect x="180" y="180" width="200" height="140" rx="12" fill="${fg}" opacity="0.15"/>
+      <rect x="420" y="220" width="160" height="100" rx="8" fill="${mid}" opacity="0.25"/>
+      <line x1="100" y1="420" x2="700" y2="420" stroke="${mid}" stroke-width="1" opacity="0.2"/>
+      <rect x="100" y="440" width="80" height="8" rx="4" fill="${mid}" opacity="0.2"/>
+      <rect x="200" y="440" width="120" height="8" rx="4" fill="${mid}" opacity="0.15"/>
+    </svg>
+  `;
+}
+
+function renderCards(filter = 'all') {
+  grid.innerHTML = '';
+  const filtered = filter === 'all'
+    ? projects
+    : projects.filter(p => p.filter === filter);
+
+  filtered.forEach((project, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.filter = project.filter;
+    card.innerHTML = `
+      <div class="card-image">
+        <div class="placeholder" style="background: ${project.colors[0]}">
+          ${createPlaceholderSVG(project.colors)}
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">${project.category}</div>
+        <h3 class="card-title">${project.title}</h3>
+        <p class="card-desc">${project.description}</p>
+        <div class="card-tags">
+          ${project.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+        </div>
+      </div>
+    `;
+    card.addEventListener('click', () => openLightbox(project));
+    grid.appendChild(card);
+
+    // Staggered reveal
+    setTimeout(() => {
+      card.classList.add('visible');
+    }, 80 * i + 100);
+  });
+}
+
+renderCards();
+
+// ─── Filters ───
+document.querySelectorAll('.filter-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    renderCards(pill.dataset.filter);
+  });
+});
+
+// ─── Lightbox ───
+const lightbox = document.getElementById('lightbox');
+
+function openLightbox(project) {
+  document.getElementById('lightbox-image').innerHTML =
+    `<div class="placeholder" style="background: ${project.colors[0]}">${createPlaceholderSVG(project.colors)}</div>`;
+  document.getElementById('lightbox-category').textContent = project.category;
+  document.getElementById('lightbox-title').textContent = project.title;
+  document.getElementById('lightbox-desc').textContent = project.description;
+  document.getElementById('lightbox-tags').innerHTML =
+    project.tags.map(t => `<span class="lightbox-tag">${t}</span>`).join('');
+  lightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  lightbox.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', (e) => {
+  if (e.target === lightbox) closeLightbox();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeLightbox();
+});
+
+// ─── Nav scroll effect ───
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 20);
+});
+</script>
+
+</body>
+</html>
